@@ -22,6 +22,8 @@ struct ContentView: View {
     @State private var directions: MKDirections.Response?
     @State private var routePolyline: MKPolyline?
     
+    @State private var mapRegion: MKCoordinateRegion?
+    
     private var startAutocompleteDelegate = AutocompleteDelegate(completions: .constant([]))
     private var endAutocompleteDelegate = AutocompleteDelegate(completions: .constant([]))
     
@@ -29,47 +31,47 @@ struct ContentView: View {
     
     var body: some View {
         VStack {
-            TextField("Start location", text: $startLocation, onEditingChanged: { isEditing in
-                isStartFieldActive = isEditing
-                isEndFieldActive = false
-                updateAucompleteResults(for: $startCompletions, with: startLocation)
-            })
+            VStack {
+                TextField("Start location", text: $startLocation, onEditingChanged: { isEditing in
+                    isStartFieldActive = isEditing
+                    isEndFieldActive = false
+                    updateAucompleteResults(for: $startCompletions, with: startLocation)
+                    updateMapRegionBasedOnLocations()
+                })
+                
+                if isStartFieldActive && !startCompletions.isEmpty {
+                    List(startCompletions, id: \.self) { completion in
+                        Text(completion.title)
+                            .onTapGesture {
+                                self.startLocation = completion.title
+                                self.isStartFieldActive = false
+                                startCompletions.removeAll()
+                            }
+                    }
+                    .frame(maxHeight: 200)
+                }
+                
+                TextField("End location", text: $endLocation, onEditingChanged: { isEditing in
+                    isEndFieldActive = isEditing
+                    isStartFieldActive = false
+                    updateAucompleteResults(for: $endCompletions, with: endLocation)
+                    updateMapRegionBasedOnLocations()
+                })
+                
+                if isEndFieldActive && !endCompletions.isEmpty {
+                    List(endCompletions, id: \.self) { completion in
+                        Text(completion.title)
+                            .onTapGesture {
+                                self.endLocation = completion.title
+                                self.isEndFieldActive = false
+                                endCompletions.removeAll()
+                            }
+                    }
+                    .frame(maxHeight: 200)
+                }
+            }
             .textFieldStyle(RoundedBorderTextFieldStyle())
             .padding()
-            .keyboardType(.default)
-            
-            if isStartFieldActive && !startCompletions.isEmpty {
-                List(startCompletions, id: \.self) { completion in
-                    Text(completion.title)
-                        .onTapGesture {
-                            self.startLocation = completion.title
-                            self.isStartFieldActive = false
-                            startCompletions.removeAll()
-                        }
-                }
-                .frame(maxHeight: 200)
-            }
-            
-            TextField("End location", text: $endLocation, onEditingChanged: { isEditing in
-                isEndFieldActive = isEditing
-                isStartFieldActive = false
-                updateAucompleteResults(for: $endCompletions, with: endLocation)
-            })
-            .textFieldStyle(RoundedBorderTextFieldStyle())
-            .padding()
-            .keyboardType(.default)
-            
-            if isEndFieldActive && !endCompletions.isEmpty {
-                List(endCompletions, id: \.self) { completion in
-                    Text(completion.title)
-                        .onTapGesture {
-                            self.endLocation = completion.title
-                            self.isEndFieldActive = false
-                            endCompletions.removeAll()
-                        }
-                }
-                .frame(maxHeight: 200)
-            }
             
             Button(action: searchForRoute) {
                 Text("Get route")
@@ -79,10 +81,9 @@ struct ContentView: View {
                     .cornerRadius(8)
             }
             
-            MapView(routePolyline: $routePolyline, mapItems: $mapItems)
+            MapView(routePolyline: $routePolyline, mapItems: $mapItems, region: $mapRegion)
                 .edgesIgnoringSafeArea(.all)
         }
-        .padding()
     }
     
     func updateAucompleteResults(for completions: Binding<[MKLocalSearchCompletion]>, with query: String) {
@@ -126,68 +127,39 @@ struct ContentView: View {
                 return
             }
             
-            if let response = response {
+            if let response = response, let route = response.routes.first {
                 DispatchQueue.main.async {
                     self.directions = response
+                    self.routePolyline = route.polyline // This sets the polyline based on the route.
                 }
             }
         }
     }
-}
-
-struct MapView: UIViewRepresentable {
-    @Binding var routePolyline: MKPolyline?
-    @Binding var mapItems: [MKMapItem]
     
-    func makeUIView(context: Context) -> MKMapView {
-        let mapView = MKMapView()
-        mapView.delegate = context.coordinator // Set the delegate
-        mapView.showsUserLocation = true
-        return mapView
-    }
-    
-    func updateUIView(_ mapView: MKMapView, context: Context) {
-        mapView.removeOverlays(mapView.overlays) // Remove old overlays
-        if let polyline = routePolyline {
-            mapView.addOverlay(polyline) // Add the route polyline
-        }
-
-        // Update annotations similarly as before
-        mapView.removeAnnotations(mapView.annotations)
-        let annotations = mapItems.map { item -> MKPointAnnotation in
-            let annotation = MKPointAnnotation()
-            annotation.coordinate = item.placemark.coordinate
-            annotation.title = item.name
-            return annotation
-        }
-        mapView.addAnnotations(annotations)
-    }
-    
-    func makeCoordinator() -> Coordinator {
-        Coordinator()
-    }
-    
-    class Coordinator: NSObject, MKMapViewDelegate {
-        func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
-            if let polyline = overlay as? MKPolyline {
-                let renderer = MKPolylineRenderer(polyline: polyline)
-                renderer.strokeColor = .blue
-                renderer.lineWidth = 4.0
-                return renderer
-            }
-            return MKOverlayRenderer()
+    func updateMapRegionBasedOnLocations() {
+        if let startItem = mapItems.first {
+            // If only start location is available
+            let region = MKCoordinateRegion(center: startItem.placemark.coordinate, latitudinalMeters: 5000, longitudinalMeters: 5000)
+            self.mapRegion = region
         }
     }
 }
 
 class AutocompleteDelegate: NSObject, MKLocalSearchCompleterDelegate {
     @Binding var completions: [MKLocalSearchCompletion]
-    
+
     init(completions: Binding<[MKLocalSearchCompletion]>) {
-        _completions = completions    }
-    
+        _completions = completions
+    }
+
     func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
-        completions = completer.results
+        DispatchQueue.main.async {
+            self.completions = completer.results
+        }
+    }
+
+    func completer(_ completer: MKLocalSearchCompleter, didFailWithError error: Error) {
+        print("Error: \(error.localizedDescription)")
     }
 }
 

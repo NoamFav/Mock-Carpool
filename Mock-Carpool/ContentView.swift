@@ -30,14 +30,22 @@ struct ContentView: View {
     let completer = MKLocalSearchCompleter()
     
     var body: some View {
-        VStack {
-            VStack {
+        ZStack(alignment: .bottom) {
+            
+            MapView(routePolyline: $routePolyline, mapItems: $mapItems, region: $mapRegion)
+                .ignoresSafeArea()
+            
+            VStack(spacing: 0) {
                 TextField("Start location", text: $startLocation, onEditingChanged: { isEditing in
                     isStartFieldActive = isEditing
                     isEndFieldActive = false
                     updateAucompleteResults(for: $startCompletions, with: startLocation)
                     updateMapRegionBasedOnLocations()
                 })
+                .padding(.top)
+                .padding(.horizontal)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .foregroundColor(.gray)
                 
                 if isStartFieldActive && !startCompletions.isEmpty {
                     List(startCompletions, id: \.self) { completion in
@@ -49,6 +57,8 @@ struct ContentView: View {
                             }
                     }
                     .frame(maxHeight: 200)
+                    .padding(.horizontal)
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
                 }
                 
                 TextField("End location", text: $endLocation, onEditingChanged: { isEditing in
@@ -57,6 +67,9 @@ struct ContentView: View {
                     updateAucompleteResults(for: $endCompletions, with: endLocation)
                     updateMapRegionBasedOnLocations()
                 })
+                .padding(.horizontal)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+
                 
                 if isEndFieldActive && !endCompletions.isEmpty {
                     List(endCompletions, id: \.self) { completion in
@@ -68,21 +81,22 @@ struct ContentView: View {
                             }
                     }
                     .frame(maxHeight: 200)
+                    .padding(.horizontal)
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
                 }
+                Button(action: searchForRoute) {
+                    Text("Get route")
+                        .padding()
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                }
+                .padding(.vertical)
             }
-            .textFieldStyle(RoundedBorderTextFieldStyle())
-            .padding()
-            
-            Button(action: searchForRoute) {
-                Text("Get route")
-                    .padding()
-                    .background(Color.blue)
-                    .foregroundColor(.white)
-                    .cornerRadius(8)
-            }
-            
-            MapView(routePolyline: $routePolyline, mapItems: $mapItems, region: $mapRegion)
-                .edgesIgnoringSafeArea(.all)
+            .background(Color.gray.opacity(0.5))  // Add a background with some opacity for better visibility
+            .cornerRadius(12) // Optional, for rounded corners on the container
+            .padding(.horizontal)
+            .ignoresSafeArea()
         }
     }
     
@@ -130,7 +144,7 @@ struct ContentView: View {
             if let response = response, let route = response.routes.first {
                 DispatchQueue.main.async {
                     self.directions = response
-                    self.routePolyline = route.polyline // This sets the polyline based on the route.
+                    self.routePolyline = route.polyline
                 }
             }
         }

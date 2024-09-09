@@ -104,11 +104,11 @@
 		B9DEF7792C8AFEF500A3ED44 /* Mock-Carpool */ = {
 			isa = PBXGroup;
 			children = (
+				B9DEF77E2C8AFEF600A3ED44 /* Assets.xcassets */,
 				B9DEF77A2C8AFEF500A3ED44 /* Mock_CarpoolApp.swift */,
 				B9DEF77C2C8AFEF500A3ED44 /* ContentView.swift */,
-				B9DEF77E2C8AFEF600A3ED44 /* Assets.xcassets */,
-				B9DEF7802C8AFEF600A3ED44 /* Preview Content */,
 				B91392C72C8E36220015534D /* MapView.swift */,
+				B9DEF7802C8AFEF600A3ED44 /* Preview Content */,
 			);
 			path = "Mock-Carpool";
 			sourceTree = "<group>";

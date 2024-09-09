@@ -1,0 +1,32 @@
+{
+  "source": "/Users/noamfavier/Mock-Carpool/Mock-Carpool/ContentView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Start location",
+        "location": {
+          "startingColumn": 27,
+          "startingLine": 40
+        }
+      },
+      {
+        "comment": "",
+        "key": "End location",
+        "location": {
+          "startingColumn": 27,
+          "startingLine": 66
+        }
+      },
+      {
+        "comment": "",
+        "key": "Get route",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 91
+        }
+      }
+    ]
+  },
+  "version": 1
+}

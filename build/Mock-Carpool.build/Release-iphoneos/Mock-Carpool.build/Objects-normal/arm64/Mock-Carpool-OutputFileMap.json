@@ -1,0 +1,30 @@
+{
+  "" : {
+    "const-values" : "/Users/noamfavier/Mock-Carpool/build/Mock-Carpool.build/Release-iphoneos/Mock-Carpool.build/Objects-normal/arm64/Mock-Carpool-master.swiftconstvalues",
+    "dependencies" : "/Users/noamfavier/Mock-Carpool/build/Mock-Carpool.build/Release-iphoneos/Mock-Carpool.build/Objects-normal/arm64/Mock-Carpool-master.d",
+    "diagnostics" : "/Users/noamfavier/Mock-Carpool/build/Mock-Carpool.build/Release-iphoneos/Mock-Carpool.build/Objects-normal/arm64/Mock-Carpool-master.dia",
+    "emit-module-dependencies" : "/Users/noamfavier/Mock-Carpool/build/Mock-Carpool.build/Release-iphoneos/Mock-Carpool.build/Objects-normal/arm64/Mock-Carpool-master-emit-module.d",
+    "emit-module-diagnostics" : "/Users/noamfavier/Mock-Carpool/build/Mock-Carpool.build/Release-iphoneos/Mock-Carpool.build/Objects-normal/arm64/Mock-Carpool-master-emit-module.dia",
+    "swift-dependencies" : "/Users/noamfavier/Mock-Carpool/build/Mock-Carpool.build/Release-iphoneos/Mock-Carpool.build/Objects-normal/arm64/Mock-Carpool-master.swiftdeps"
+  },
+  "/Users/noamfavier/Mock-Carpool/Mock-Carpool/ContentView.swift" : {
+    "index-unit-output-path" : "/Mock-Carpool.build/Release-iphoneos/Mock-Carpool.build/Objects-normal/arm64/ContentView.o",
+    "llvm-bc" : "/Users/noamfavier/Mock-Carpool/build/Mock-Carpool.build/Release-iphoneos/Mock-Carpool.build/Objects-normal/arm64/ContentView.bc",
+    "object" : "/Users/noamfavier/Mock-Carpool/build/Mock-Carpool.build/Release-iphoneos/Mock-Carpool.build/Objects-normal/arm64/ContentView.o"
+  },
+  "/Users/noamfavier/Mock-Carpool/Mock-Carpool/MapView.swift" : {
+    "index-unit-output-path" : "/Mock-Carpool.build/Release-iphoneos/Mock-Carpool.build/Objects-normal/arm64/MapView.o",
+    "llvm-bc" : "/Users/noamfavier/Mock-Carpool/build/Mock-Carpool.build/Release-iphoneos/Mock-Carpool.build/Objects-normal/arm64/MapView.bc",
+    "object" : "/Users/noamfavier/Mock-Carpool/build/Mock-Carpool.build/Release-iphoneos/Mock-Carpool.build/Objects-normal/arm64/MapView.o"
+  },
+  "/Users/noamfavier/Mock-Carpool/Mock-Carpool/Mock_CarpoolApp.swift" : {
+    "index-unit-output-path" : "/Mock-Carpool.build/Release-iphoneos/Mock-Carpool.build/Objects-normal/arm64/Mock_CarpoolApp.o",
+    "llvm-bc" : "/Users/noamfavier/Mock-Carpool/build/Mock-Carpool.build/Release-iphoneos/Mock-Carpool.build/Objects-normal/arm64/Mock_CarpoolApp.bc",
+    "object" : "/Users/noamfavier/Mock-Carpool/build/Mock-Carpool.build/Release-iphoneos/Mock-Carpool.build/Objects-normal/arm64/Mock_CarpoolApp.o"
+  },
+  "/Users/noamfavier/Mock-Carpool/build/Mock-Carpool.build/Release-iphoneos/Mock-Carpool.build/DerivedSources/GeneratedAssetSymbols.swift" : {
+    "index-unit-output-path" : "/Mock-Carpool.build/Release-iphoneos/Mock-Carpool.build/Objects-normal/arm64/GeneratedAssetSymbols.o",
+    "llvm-bc" : "/Users/noamfavier/Mock-Carpool/build/Mock-Carpool.build/Release-iphoneos/Mock-Carpool.build/Objects-normal/arm64/GeneratedAssetSymbols.bc",
+    "object" : "/Users/noamfavier/Mock-Carpool/build/Mock-Carpool.build/Release-iphoneos/Mock-Carpool.build/Objects-normal/arm64/GeneratedAssetSymbols.o"
+  }
+}

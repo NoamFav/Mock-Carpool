@@ -1,0 +1,10 @@
+version: "Apple Swift version 6.0 (swiftlang-6.0.0.4.52 clang-1600.0.21.1.3)"
+options: "c1de96138ba763e44509e4848e49609a93499f021778bded44ce7d02d83bac62"
+build_start_time: [1725906829, 376931000]
+build_end_time: [1725906830, 210904000]
+inputs:
+  "/Users/noamfavier/Mock-Carpool/Mock-Carpool/ContentView.swift": [1725906823, 981959677]
+  "/Users/noamfavier/Mock-Carpool/Mock-Carpool/MapView.swift": [1725824746, 616131694]
+  "/Users/noamfavier/Mock-Carpool/Mock-Carpool/Mock_CarpoolApp.swift": [1725886342, 117629354]
+  ? "/Users/noamfavier/Mock-Carpool/build/Mock-Carpool.build/Release-iphoneos/Mock-Carpool.build/DerivedSources/GeneratedAssetSymbols.swift"
+  : [1725906515, 646744403]

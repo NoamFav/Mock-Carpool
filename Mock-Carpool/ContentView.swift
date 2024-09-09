@@ -30,6 +30,7 @@ struct ContentView: View {
     let completer = MKLocalSearchCompleter()
     
     var body: some View {
+        
         ZStack(alignment: .bottom) {
             
             MapView(routePolyline: $routePolyline, mapItems: $mapItems, region: $mapRegion)
@@ -37,15 +38,16 @@ struct ContentView: View {
             
             VStack(spacing: 0) {
                 TextField("Start location", text: $startLocation, onEditingChanged: { isEditing in
-                    isStartFieldActive = isEditing
-                    isEndFieldActive = false
+                        isStartFieldActive = isEditing
+                        isEndFieldActive = !isEditing
+                    })
+                .onChange(of: startLocation) {
                     updateAucompleteResults(for: $startCompletions, with: startLocation)
                     updateMapRegionBasedOnLocations()
-                })
+                }
                 .padding(.top)
                 .padding(.horizontal)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
-                .foregroundColor(.gray)
                 
                 if isStartFieldActive && !startCompletions.isEmpty {
                     List(startCompletions, id: \.self) { completion in
@@ -64,12 +66,13 @@ struct ContentView: View {
                 TextField("End location", text: $endLocation, onEditingChanged: { isEditing in
                     isEndFieldActive = isEditing
                     isStartFieldActive = false
+                })
+                .onChange(of: endLocation) {
                     updateAucompleteResults(for: $endCompletions, with: endLocation)
                     updateMapRegionBasedOnLocations()
-                })
+                }
                 .padding(.horizontal)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
-
                 
                 if isEndFieldActive && !endCompletions.isEmpty {
                     List(endCompletions, id: \.self) { completion in
@@ -101,6 +104,7 @@ struct ContentView: View {
     }
     
     func updateAucompleteResults(for completions: Binding<[MKLocalSearchCompletion]>, with query: String) {
+        print("updating autocomplete")
         completer.queryFragment = query
         completer.resultTypes = .address
         completer.delegate = isStartFieldActive ? startAutocompleteDelegate : endAutocompleteDelegate
@@ -169,11 +173,12 @@ class AutocompleteDelegate: NSObject, MKLocalSearchCompleterDelegate {
     func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
         DispatchQueue.main.async {
             self.completions = completer.results
+            print("Completions updated: \(self.completions.map { $0.title })")
         }
     }
 
     func completer(_ completer: MKLocalSearchCompleter, didFailWithError error: Error) {
-        print("Error: \(error.localizedDescription)")
+        print("Autocomplete failed with error: \(error)")
     }
 }
 

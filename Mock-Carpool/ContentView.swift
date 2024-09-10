@@ -51,7 +51,7 @@ struct ContentView: View {
                         .clipShape(Circle())
                         .overlay(
                             Circle()
-                                .stroke(Color.white.opacity(0.6), lineWidth: 1) // Light stroke for definition
+                                .stroke(Color.white.opacity(0.6), lineWidth: 1)
                         )
                     
                     TextField("Start location", text: $startLocation)
@@ -61,7 +61,7 @@ struct ContentView: View {
                         .cornerRadius(10)
                         .overlay(
                             RoundedRectangle(cornerRadius: 10)
-                                .stroke(Color.white.opacity(0.6), lineWidth: 1) // Light stroke for definition
+                                .stroke(Color.white.opacity(0.6), lineWidth: 1)
                         )
                 }
                 .padding(.horizontal)
@@ -76,7 +76,7 @@ struct ContentView: View {
                         .clipShape(Circle())
                         .overlay(
                             Circle()
-                                .stroke(Color.white.opacity(0.6), lineWidth: 1) // Light stroke for definition
+                                .stroke(Color.white.opacity(0.6), lineWidth: 1)
                         )
                     
                     TextField("End location", text: $endLocation)
@@ -198,10 +198,17 @@ struct ContentView: View {
                     self.routePolyline = route.polyline
                     
                     let distanceInKilometers = route.distance / 1000
-                    let durationInMinutes = route.expectedTravelTime / 60
+                    let duration = route.expectedTravelTime / 60
                     
                     self.routeDistance = String(format: "%.2f km", distanceInKilometers)
-                    self.routeTravelTime = String(format: "%.0f min", durationInMinutes)
+                    
+                    if duration > 60 {
+                        let durationInHour = Int(duration) / 60  // Integer division to get hours
+                        let durationInMinutes = Int(duration) % 60  // Modulo to get remaining minutes
+                        self.routeTravelTime = String(format: "%d h %d min", durationInHour, durationInMinutes)
+                    } else {
+                        self.routeTravelTime = String(format: "%d min", Int(duration))
+                    }
                 }
             }
         }
